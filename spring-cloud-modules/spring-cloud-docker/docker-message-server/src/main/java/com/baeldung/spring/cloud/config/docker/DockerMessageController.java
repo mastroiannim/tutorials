@@ -9,4 +9,9 @@ public class DockerMessageController {
     public String getMessage() {
         return "Hello from Docker!";
     }
+
+    @GetMapping("/")
+    public String home() {
+        return "Home from Docker!";
+    }
 }
