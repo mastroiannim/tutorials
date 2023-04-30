@@ -3,25 +3,30 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>docker-message-server</artifactId>
+    <artifactId>app</artifactId>
     <version>1.0.0</version>
-    <name>docker-message-server</name>
-
-    <parent>
-        <groupId>com.baeldung.spring.cloud</groupId>
-        <artifactId>spring-cloud-docker</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+    <name>Spring Boot App</name>
+    <groupId>it.paleocapa.mastroiannim</groupId>
+  
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.7.11</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+
+
+        
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>6.5.0</version>
         </dependency>
     </dependencies>
 
@@ -30,6 +35,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.11</version>
                 <executions>
                     <execution>
                         <goals>
