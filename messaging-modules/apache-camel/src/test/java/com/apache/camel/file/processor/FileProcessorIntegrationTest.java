@@ -1,15 +1,21 @@
 package com.apache.camel.file.processor;
 
-import java.io.File;
-
+import com.baeldung.camel.apache.file.FileProcessor;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.awaitility.Awaitility;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.baeldung.camel.apache.file.FileProcessor;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 public class FileProcessorIntegrationTest {
@@ -33,19 +39,25 @@ public class FileProcessorIntegrationTest {
         file2.createNewFile();
     }
 
+    @After
+    public void tearDown() {
+        cleanFolder(new File(SOURCE_FOLDER));
+        cleanFolder(new File(DESTINATION_FOLDER));
+    }
+
     private void cleanFolder(File folder) {
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    file.delete();
+                    file.deleteOnExit();
                 }
             }
         }
     }
 
     @Test
-    public void moveFolderContentJavaDSLTest() throws Exception {
+    public void givenJavaDSLRoute_whenCamelStart_thenMoveFolderContent() throws Exception {
         final CamelContext camelContext = new DefaultCamelContext();
         camelContext.addRoutes(new RouteBuilder() {
             @Override
@@ -54,15 +66,26 @@ public class FileProcessorIntegrationTest {
             }
         });
         camelContext.start();
-        Thread.sleep(DURATION_MILIS);
+        verifyFolderContent();
         camelContext.stop();
     }
 
     @Test
-    public void moveFolderContentSpringDSLTest() throws InterruptedException {
+    public void givenSpringDSLRoute_whenCamelStart_thenMoveFolderContent() throws InterruptedException {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("camel-context-test.xml");
-        Thread.sleep(DURATION_MILIS);
+        verifyFolderContent();
         applicationContext.close();
+    }
 
+    private void verifyFolderContent() {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        File destinationFile1 = new File(DESTINATION_FOLDER + "/" + dateFormat.format(date) + "File1.txt");
+        File destinationFile2 = new File(DESTINATION_FOLDER + "/" + dateFormat.format(date) + "File2.txt");
+
+        Awaitility.await().atMost(DURATION_MILIS, TimeUnit.MILLISECONDS).untilAsserted(() -> {
+            assertThat(destinationFile1.exists()).isTrue();
+            assertThat(destinationFile2.exists()).isTrue();
+        });
     }
 }

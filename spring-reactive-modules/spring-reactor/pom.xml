@@ -10,10 +10,9 @@
     <url>http://maven.apache.org</url>
 
     <parent>
-        <groupId>com.baeldung</groupId>
-        <artifactId>parent-boot-2</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../parent-boot-2</relativePath>
+        <groupId>com.baeldung.spring.reactive</groupId>
+        <artifactId>spring-reactive-modules</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -38,7 +37,6 @@
     </dependencies>
 
     <properties>
-        <spring-cloud-sleuth.version>2.0.2.RELEASE</spring-cloud-sleuth.version>
         <reactor.version>2.0.8.RELEASE</reactor.version>
     </properties>
 
